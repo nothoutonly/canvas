@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Rect</title>
+</head>
+<body>
+	<canvas id="myCanvas" width="400" height="400" style="border:solid 1px #CCC;">
+		您的浏览器不支持canvas，建议使用最新版的Chrome
+	</canvas>
+
+<script>
+	var canvas = document.getElementById("myCanvas");
+	var context = canvas.getContext("2d");
+	var centerX = canvas.width/2;
+	var centerY = canvas.height/2;
+
+	var Rect = function(x, y, r, r){
+		this.x = x;
+		this.y = y;
+		this.draw = function(){
+			context.clearRect(0, 0, centerX*2, centerY*2);
+			context.beginPath();
+			context.strokeRect(this.x, this.y, r, r);
+			context.stroke();
+			context.closePath();
+		}
+	}
+	//矩形长宽
+	var r = 50;
+	//创建一个矩形，位置随机
+	var rect = new Rect(centerX*Math.random(), centerX*Math.random(), r, r);
+	//显示矩形
+	rect.draw();
+
+	canvas.addEventListener("mousedown", OnMouseDown, false);
+	canvas.addEventListener("mousemove", OnMouseMove, false);
+	canvas.addEventListener("mouseup", OnMouseUp, false);
+	var isDown = false;
+
+	function OnMouseDown(evt){
+		var mouseX = evt.layerX;
+		var mouseY = evt.layerY;
+		var dx = mouseX-rect.x;
+		var dy = mouseY-rect.y;
+		if(dx<=r&dx>0&dy<=r&dy>0){
+			isDown = true;
+		} else{
+			isDown = false;
+		}
+	}
+
+	function OnMouseMove(evt){
+		if (isDown == true){
+			var mouseX = evt.layerX-25;
+			var mouseY = evt.layerY-25;
+			rect.x = mouseX;
+			rect.y = mouseY;
+			rect.draw();
+		}
+	}
+
+	function OnMouseUp(evt){
+		isDown = false;
+	}
+</script>
+</body>
+</html>
